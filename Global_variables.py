@@ -8,7 +8,7 @@ def list_of_link_to_retreive_data():
         c.execute("SELECT * FROM my_links")
         my_data =c.fetchall()
     except:
-        pass
+        print("fdgsdfgs")
 
     conn.commit()
     conn.close()
