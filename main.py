@@ -28,6 +28,8 @@ def display_main_screen_positions(self):
     self.league_selection.pack(pady=25)
 
 
+
+
 class DesignMainWindow:
 
     def __init__(self, root):
@@ -49,6 +51,9 @@ class DesignMainWindow:
         self.league_selection.bind("<<ComboboxSelected>>", self.on_select)
 
         display_main_screen_positions(self)
+        self.on_select(self)
+
+
 
     def on_select(self, event):
         sql_connections.drop_create_table()
@@ -63,6 +68,7 @@ class DesignMainWindow:
                 except Exception as error:
                     print(error)
         main_table_with_filters.my_table_games_tree_view(self.frame_buttom)
+
 
 class Start:
     def __init__(self):

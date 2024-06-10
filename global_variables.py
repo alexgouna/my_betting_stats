@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 
 
 
-my_pages_to_collect_data = 2
+my_pages_to_collect_data = 1
 count_tries_to_connect = 1
 
 # the league list is getting from the text file "league list.txt" and the format is line 1 title/ line 2 link /line3 title etc.
