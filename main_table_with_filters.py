@@ -5,7 +5,9 @@ import sqlite3
 
 def my_table_games_tree_view(my_root):
     def apply_filters(*args):
-        query = "SELECT * FROM table_team_games"
+
+
+        query = "SELECT * FROM table_team_games WHERE League LIKE '%" + filter_entry.get() + "%' OR Home LIKE '%" + filter_entry.get() + "%' OR Away LIKE '%" + filter_entry.get() + "%'"
         params = []
         try:
             conn = sqlite3.connect('my_database.db')
@@ -45,6 +47,19 @@ def my_table_games_tree_view(my_root):
     frame = tk.Frame(my_root)
     frame.pack(fill=tk.BOTH, expand=1)
 
+
+    # Create a frame for the filter entry
+    filter_frame = tk.Frame(frame)
+    filter_frame.pack(fill=tk.X)
+
+    filter_label = tk.Label(filter_frame, text="Filter:")
+    filter_label.pack(side=tk.LEFT, padx=5, pady=5)
+
+    filter_entry = tk.Entry(filter_frame)
+    filter_entry.pack(side=tk.LEFT, fill=tk.X, expand=1, padx=5, pady=5)
+    filter_entry.bind("<KeyRelease>", apply_filters)
+
+
     # Create the Treeview widget
     tree = ttk.Treeview(frame, columns=visible_cols, show='headings')
     for col in visible_cols:
@@ -58,7 +73,11 @@ def my_table_games_tree_view(my_root):
     v_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
     tree.configure(yscrollcommand=v_scrollbar.set)
 
+
+
     apply_filters()
 
 
-
+root = tk.Tk()
+my_table_games_tree_view(root)
+root.mainloop()
