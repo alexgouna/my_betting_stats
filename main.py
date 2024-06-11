@@ -14,18 +14,22 @@ from urllib.request import Request, urlopen
 
 import main_table_with_filters
 import sql_connections
+import get_my_data_from_total_cormer
 
 
+def on_click_button(self):
+    my_data=[]
+    print(my_var.list_league())
+    for my_link in my_var.list_league():
+        print(my_link)
+        for link in sql_connections.get_my_team_first_page_link(my_link):
+            for i in range(1,my_var.my_pages_to_collect_data):
+                my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link+str(i)))
+        # print(my_data)
 
-def display_main_screen_positions(self):
-    self.frame_top.pack(side=TOP, expand=False, fill=BOTH)
-    self.frame_buttom.pack(side=BOTTOM, expand=True, fill=BOTH)
-
-    self.frame_top_left.pack(side=LEFT, expand=True, fill=BOTH)
-    self.frame_top_right.pack(side=RIGHT, expand=True, fill=BOTH)
-
-    self.entry_search.pack(pady=25)
-    self.league_selection.pack(pady=25)
+        print('----------------------------')
+        # for dato in my_data:
+        #     print(dato)
 
 
 
@@ -33,41 +37,26 @@ def display_main_screen_positions(self):
 class DesignMainWindow:
 
     def __init__(self, root):
-        self.options = my_var.list_league()
-        self.selected_option = StringVar()
 
         self.root = root
         # create all the frames
         self.frame_top = Frame(self.root, height=50)
         self.frame_buttom = Frame(self.root, height=500)
-        self.frame_top_left = Frame(self.frame_top)
-        self.frame_top_right = Frame(self.frame_top)
 
-        self.entry_search = Entry(self.frame_top_left, width=30)
-
-        self.league_selection = ttk.Combobox(self.frame_top_right, textvariable=self.selected_option, width=50)
-        self.league_selection['values'] = self.options[0]
-        self.league_selection.current(0)
-        self.league_selection.bind("<<ComboboxSelected>>", self.on_select)
-
-        display_main_screen_positions(self)
-        self.on_select(self)
+        self.entry_search = Entry(self.frame_top, width=60)
+        self.my_button = Button(self.frame_top,text="press here",command=lambda: on_click_button(self))
 
 
 
-    def on_select(self, event):
-        sql_connections.drop_create_table()
-        for i in range(len(self.options[0])):
-            if self.options[0][i] == self.league_selection.get():
-                try:
-                    my_team_first_page_links = (my_var.get_my_team_first_page_link(self.options[1][i]))
-                    for link in my_team_first_page_links:
-                        for page in range(my_var.my_pages_to_collect_data):
-                            sql_connections.game_data(link+str(page))
-                        sleep(1)
-                except Exception as error:
-                    print(error)
-        main_table_with_filters.my_table_games_tree_view(self.frame_buttom)
+        self.frame_top.pack(side=TOP, expand=False, fill=BOTH)
+        self.frame_buttom.pack(side=BOTTOM, expand=True, fill=BOTH)
+        self.entry_search.pack(pady=5)
+        self.my_button.pack(pady=5)
+
+
+
+
+
 
 
 class Start:
