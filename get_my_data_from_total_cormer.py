@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-
-
+import time
+import global_variables as my_var
 def find_my_team(item, last_pos):
     my_temp = item.find('span class', item.find('/team/view/', last_pos))
     my_test_temp = item.find('home', my_temp, my_temp + 30)
@@ -45,7 +45,8 @@ def find_my_live_stats(item, last_pos):
     return goal_list
 
 def get_my_team_first_page_link(my_league_link):
-    print(my_league_link)
+    # print(my_league_link)
+    time.sleep(1)
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -64,6 +65,7 @@ def get_my_team_first_page_link(my_league_link):
         counter = 0
         my_table=[]
         for item in my_list_with_soup_elements:
+
 
             pos_match_id_start = item.find('data-match_id=') + 15
             pos_match_id_end = item.find('<td class=', pos_match_id_start) - 3
@@ -130,7 +132,21 @@ def get_my_team_first_page_link(my_league_link):
                 counter = counter + 1
 
         return my_table
-    except Exception:
-        print(Exception)
+    except Exception as error:
+        print("sdfgasdf")
+        print(type(error))
+        print(error.args)
+        time.sleep(10)
+        print(error)
+        if my_var.my_old_url != my_league_link:
+            my_var.my_counter=5
+        while my_var.my_counter>0:
+
+            time.sleep(5)
+            my_var.my_counter = my_var.my_counter - 1
+            my_var.my_old_url = my_league_link
+            get_my_team_first_page_link(my_league_link)
+
+
 
 
