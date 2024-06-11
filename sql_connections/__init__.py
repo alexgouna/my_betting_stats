@@ -16,20 +16,29 @@ def drop_create_table():
     conn = sqlite3.connect('my_database.db')
     c = conn.cursor()
     c.execute("DROP TABLE IF EXISTS table_team_games")
+    c.execute("DROP TABLE IF EXISTS table_goals")
     c.execute("""CREATE TABLE table_team_games (
-                ID INTEGER UNIQUE,
-                League TEXT,
-                Time TEXT,
-                Home TEXT,
-                Goal_Home INTEGER,
-                Goal_Away INTEGER,
-                Away TEXT,
-                Corner TEXT,
-                Corner_half TEXT,
-                Dangerous_Attacks TEXT,
-                Shots TEXT,
-	            PRIMARY KEY("ID" AUTOINCREMENT))
-                """)
+                    ID INTEGER UNIQUE,
+                    Game_ID INTEGER UNIQUE,
+                    League TEXT,
+                    Time TEXT,
+                    Home TEXT,
+                    Goal_Home INTEGER,
+                    Goal_Away INTEGER,
+                    Away TEXT,
+                    Corner TEXT,
+                    Corner_half TEXT,
+                    Dangerous_Attacks TEXT,
+                    Shots TEXT,
+    	            PRIMARY KEY("ID" AUTOINCREMENT))
+                    """)
+    c.execute("""CREATE TABLE table_goals (
+                    ID INTEGER UNIQUE,
+                    Game_ID INTEGER,
+                    goal_minute INTEGER,
+                    Home_Away_scored TEXT,
+    	            PRIMARY KEY("ID" AUTOINCREMENT))
+                    """)
     conn.commit()
     conn.close()
 

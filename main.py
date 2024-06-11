@@ -17,7 +17,7 @@ import sql_connections
 import get_my_data_from_total_cormer
 
 
-def on_click_button(self):
+def retrieve_my_data(self):
     my_data=[]
     print(my_var.list_league())
     for my_link in my_var.list_league():
@@ -31,6 +31,7 @@ def on_click_button(self):
         # for dato in my_data:
         #     print(dato)
 
+def create_database(self):
 
 
 
@@ -44,7 +45,9 @@ class DesignMainWindow:
         self.frame_buttom = Frame(self.root, height=500)
 
         self.entry_search = Entry(self.frame_top, width=60)
-        self.my_button = Button(self.frame_top,text="press here",command=lambda: on_click_button(self))
+        self.my_button = Button(self.frame_top,text="press here",command=lambda: retrieve_my_data(self))
+        self.my_button_create_database_and_tables = Button(self.frame_top, text="create database and tables", command=lambda: create_database(self))
+
 
 
 
@@ -52,6 +55,7 @@ class DesignMainWindow:
         self.frame_buttom.pack(side=BOTTOM, expand=True, fill=BOTH)
         self.entry_search.pack(pady=5)
         self.my_button.pack(pady=5)
+        self.my_button_create_database_and_tables.pack(pady=5)
 
 
 
