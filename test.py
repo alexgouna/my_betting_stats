@@ -1,44 +1,45 @@
-import sqlite3
-import tkinter as tk
-from tkinter import ttk
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableView, QVBoxLayout, QWidget
+from PyQt5.QtCore import QAbstractTableModel, Qt
 
-conn = sqlite3.connect('database.db')
-c = conn.cursor()
+class MyTableModel(QAbstractTableModel):
+    def __init__(self, data):
+        super().__init__()
+        self._data = data
 
-conn.commit()
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            return self._data[index.row()][index.column()]
 
-# Function to populate the Treeview
-def populate_treeview(tree):
-    c.execute('SELECT * FROM table_team_games')
-    rows = c.fetchall()
-    for row in rows:
-        tree.insert("", "end", values=row)
+    def rowCount(self, index):
+        return len(self._data)
 
-# Function to handle double-click event
-def on_double_click(event):
-    item = tree.selection()[0]
-    item_id = tree.item(item, "values")[0]
-    print(f"Selected ID: {item_id}")
+    def columnCount(self, index):
+        return len(self._data[0])
 
-# Set up the main application window
-root = tk.Tk()
-root.title("Team Games")
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
 
-# Create the Treeview
-tree = ttk.Treeview(root, columns=("ID", "Game_ID", "League", "Time", "Home", "Goal_Home", "Goal_Away", "Away", "Corner", "Corner_half", "Dangerous_Attacks", "Shots"), show="headings")
+        self.table = QTableView()
+        data = [
+            ['Row 0, Column 0', 'Row 0, Column 1'],
+            ['Row 1, Column 0', 'Row 1, Column 1'],
+            ['Row 1, Column 0', 'Row 1, Column 1'],['Row 1, Column 0', 'Row 1, Column 1'],
+            ['Row 1, Column 0', 'Row 1, Column 1'],
+            ['Row 1, Column 0', 'Row 1, Column 1']
+        ]
+        self.model = MyTableModel(data)
+        self.table.setModel(self.model)
 
-# Define the headings
-for col in tree["columns"]:
-    tree.heading(col, text=col)
+        layout = QVBoxLayout()
+        layout.addWidget(self.table)
 
-# Populate the Treeview with data
-populate_treeview(tree)
+        container = QWidget()
+        container.setLayout(layout)
+        self.setCentralWidget(container)
 
-
-tree.bind("<Double-1>", on_double_click)
-
-tree.pack(expand=True, fill="both")
-
-
-root.mainloop()
-conn.close()
+app = QApplication(sys.argv)
+window = MainWindow()
+window.show()
+app.exec_()
