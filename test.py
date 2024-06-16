@@ -1,45 +1,13 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableView, QVBoxLayout, QWidget
-from PyQt5.QtCore import QAbstractTableModel, Qt
+import pandas as pd
+import numpy as np
 
-class MyTableModel(QAbstractTableModel):
-    def __init__(self, data):
-        super().__init__()
-        self._data = data
+# Create a random table with 5 columns and 10 rows
+data = np.random.rand(10, 5)
+columns = ['A', 'B', 'C', 'D', 'E']
+df = pd.DataFrame(data, columns=columns)
 
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-            return self._data[index.row()][index.column()]
+# Save the DataFrame to an Excel file
+file_path = 'C:/Users/AlexPc/Desktop/random.xlsx'
+df.to_excel(file_path, index=False)
 
-    def rowCount(self, index):
-        return len(self._data)
-
-    def columnCount(self, index):
-        return len(self._data[0])
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-
-        self.table = QTableView()
-        data = [
-            ['Row 0, Column 0', 'Row 0, Column 1'],
-            ['Row 1, Column 0', 'Row 1, Column 1'],
-            ['Row 1, Column 0', 'Row 1, Column 1'],['Row 1, Column 0', 'Row 1, Column 1'],
-            ['Row 1, Column 0', 'Row 1, Column 1'],
-            ['Row 1, Column 0', 'Row 1, Column 1']
-        ]
-        self.model = MyTableModel(data)
-        self.table.setModel(self.model)
-
-        layout = QVBoxLayout()
-        layout.addWidget(self.table)
-
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
-
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec_()
+print(f"Random table saved to {file_path}")
