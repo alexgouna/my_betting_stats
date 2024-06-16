@@ -96,7 +96,7 @@ def insert_data_of_the_games(my_table):
                     VALUES ('{game[0]}','{game[1]}','{game[2]}','{team_name(game[3])}','{goal(game[4],'Home')}','{goal(game[4],'Away')}',
                     '{team_name(game[5])}','{game[6]}','{game[7]}','{game[8]}','{game[9]}')
                """
-        print(sql)
+        # print(sql)
         c.execute(sql)
         for my_goal in game[10]:
             if my_goal != None:
@@ -104,7 +104,7 @@ def insert_data_of_the_games(my_table):
                             (Game_ID, goal_minute, Home_Away_scored)
                             VALUES ('{game[0]}','{my_goal[1]}','{my_goal[0]}')
                        """
-                print(sql)
+                # print(sql)
                 c.execute(sql)
 
     conn.commit()
@@ -112,7 +112,7 @@ def insert_data_of_the_games(my_table):
 
 
 def get_my_team_first_page_link(my_link):
-    print(my_link)
+    # print('666666666666666',my_link)
 
     try:
         headers = {
@@ -134,7 +134,7 @@ def get_my_team_first_page_link(my_link):
         # for team_number, team_name in team_info:
         #     print(f"Team number: {team_number}, Team name: {team_name}")
 
-
+        # print('545555555555555555555555555',team_info)
         return team_info
     except Exception as error:
         print(error)

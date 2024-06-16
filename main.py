@@ -1,9 +1,7 @@
 import threading
 from tkinter import *
-from tkinter import ttk
-import global_variables as my_var
-import tkinter as tk
 from tkinter import ttk, messagebox
+import global_variables as my_var
 import pandas as pd
 import sqlite3
 import requests
@@ -23,7 +21,7 @@ def duplicate_or_already_exist_in_sql(my_table):
         j = i + 1
         while j < len(my_table):
             if my_table[i][0] == my_table[j][0]:
-                print(my_table[i][0], "    ", my_table[j][0])
+                # print(my_table[i][0], "    ", my_table[j][0])
                 my_table.remove(my_table[j])
             else:
                 j = j + 1
@@ -50,49 +48,51 @@ def retrieve_my_data(self):
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
 
     for page in my_data:
-        print(page)
-        if page != None:
+        # print(page)
+        if page is not None:
             for row in page:
                 my_table.append(row)
     my_table = duplicate_or_already_exist_in_sql(my_table)
 
-    # print(my_data)
-    # print('----------------------------')
-    # for dato in my_data:
-    #     print(dato)
     sql_connections.insert_data_of_the_games(my_table)
 
 
 def create_database(self):
-    sql_connections.drop_create_table()
+    answer = messagebox.askyesno('Warning!!!','You will delete all Data!!!\nDo you want to continue?', icon='warning')
+    # print(answer)
+    if answer:
+        sql_connections.drop_create_table()
 
 
 def live_page(self):
-    my_var.times_live_button_pussed = my_var.times_live_button_pussed +1
-    print("live page data")
+    my_var.times_live_button_pussed += 1
+    # print("live page data")
     my_data = []
-    my_table=[]
+    my_table = []
     my_link = my_var.total_corner_live
-    counter =0
-    temp_counter_for_test=0
+    counter = 0
+    temp_counter_for_test = 0
     for link in sql_connections.get_my_team_first_page_link(my_link):
-        temp_counter_for_test = temp_counter_for_test + 1
-        print(link)
-        if my_var.times_live_button_pussed<2:
-                for i in range(1, my_var.my_pages_to_collect_data):
-                    my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
+        temp_counter_for_test += 1
+        # print('2222222',link)
+        if my_var.times_live_button_pussed < 2:
+            for i in range(1, my_var.my_pages_to_collect_data):
+                my_var.current_year = '2024'
+                my_var.temp_month = '12'
+                my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
         else:
             # αν πατήσω κουμπί των live περισσότερες από μία φορές.
-            if counter<30:
+            if counter < 30:
                 for i in range(1, my_var.my_pages_to_collect_data):
+                    my_var.current_year = '2024'
+                    my_var.temp_month = '12'
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
-            counter = counter+1
-        if temp_counter_for_test==5:
+            counter += 1
+        if temp_counter_for_test == 5:
             break
-
     for page in my_data:
-        print(page)
-        if page != None:
+        # print(page)
+        if page is not None:
             for row in page:
                 my_table.append(row)
     my_table = duplicate_or_already_exist_in_sql(my_table)
@@ -106,6 +106,8 @@ def live_page(self):
 
 def show_detailed_data():
     Show_data.show_detailed_data()
+
+
 class DesignMainWindow:
 
     def __init__(self, root):
@@ -115,14 +117,14 @@ class DesignMainWindow:
         self.frame_buttom = Frame(self.root, height=500)
 
         self.entry_search = Entry(self.frame_top, width=60)
-        self.my_button = Button(self.frame_top, text="press here to get data from leagues from the text", command=lambda: retrieve_my_data(self))
+        self.my_button = Button(self.frame_top, text="press here to get data from leagues from the text",
+                                command=lambda: retrieve_my_data(self))
         self.my_button_live_page_data = Button(self.frame_top, text="get data from live page",
-                                                           command=lambda: live_page(self),padx=30, pady=30)
+                                               command=lambda: live_page(self), padx=30, pady=30)
         self.my_button_create_database_and_tables = Button(self.frame_top, text="create database and tables",
                                                            command=lambda: create_database(self))
         self.my_button_show_data_details = Button(self.frame_top, text="Show detailed data",
-                                                           command=show_detailed_data,padx=30, pady=30)
-
+                                                  command=show_detailed_data, padx=30, pady=30)
 
         self.frame_top.pack(side=TOP, expand=False, fill=BOTH)
         self.frame_buttom.pack(side=BOTTOM, expand=True, fill=BOTH)
@@ -131,6 +133,12 @@ class DesignMainWindow:
         self.my_button_live_page_data.pack(pady=5)
         self.my_button_create_database_and_tables.pack(pady=5)
         self.my_button_show_data_details.pack(pady=5)
+
+        # Bind the Escape key to a function that does nothing
+        self.root.bind('<Escape>', self.do_nothing)
+
+    def do_nothing(self, event):
+        pass
 
 
 class Start:

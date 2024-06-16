@@ -44,6 +44,17 @@ def find_my_live_stats(item, last_pos):
         last_pos = pos_goal_time_end + 31
     return goal_list
 
+
+def fix_date_time(my_date_time):
+    if int(my_date_time[:2]) > int(my_var.temp_month):
+        my_var.current_year = str(int(my_var.current_year) - 1)
+    my_date = str(my_var.current_year) + '/' + my_date_time
+    my_var.temp_month = my_date_time[:2]
+
+    return my_date
+
+
+
 def get_my_team_first_page_link(my_league_link):
     print(my_league_link)
     time.sleep(my_var.time_sleep_between_each_link)
@@ -105,14 +116,17 @@ def get_my_team_first_page_link(my_league_link):
 
                 match_id = item[pos_match_id_start:pos_match_id_end]
                 league = item[pos_league_start:pos_league_end]
-                date_time = item[pos_date_time_start:pos_date_time_end]
+                date_time = fix_date_time(item[pos_date_time_start:pos_date_time_end])
                 team_home = item[pos_team_home_start:pos_team_home_end]
                 goal = item[pos_goal_start:pos_goal_end]
                 team_away = item[pos_team_away_start:pos_team_away_end]
                 corner = item[pos_corner_start:pos_corner_end]
                 half_corner = item[pos_half_corner_start:pos_half_corner_end]
                 dangerous_attacks = item[pos_dangerous_attacks_start:pos_dangerous_attacks_end]
-                shots = item[pos_shots_start:pos_shots_end]
+                if pos_shots_end-pos_shots_start<10:
+                    shots = item[pos_shots_start:pos_shots_end]
+                else:
+                    shots = "-"
 
                 # ================================         LIVE            ===========================
 
