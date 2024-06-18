@@ -89,7 +89,9 @@ def team_name(my_name):
 def insert_data_of_the_games(my_table):
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
+    # print(my_table)
     for game in my_table:
+        # print(game)
         sql = f"""INSERT INTO table_team_games 
                     (Game_ID, League, Time, Home, Goal_Home, Goal_Away, 
                     Away, Corner, Corner_half, Dangerous_Attacks, Shots)
@@ -138,6 +140,27 @@ def get_my_team_first_page_link(my_link):
         return team_info
     except Exception as error:
         print(error)
+
+
+
+
+def get_all_teams_data():
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+
+    sql = """SELECT t1.*, t2.*
+FROM table_team_games AS t1
+LEFT JOIN table_goals AS t2 
+ON t2.Game_ID = t1.Game_ID
+ORDER BY t1.Time DESC, t1.Game_ID ASC;
+        """
+    my_team = c.execute(sql).fetchall()
+
+    conn.commit()
+    conn.close()
+    return my_team
+
+
 
 
 

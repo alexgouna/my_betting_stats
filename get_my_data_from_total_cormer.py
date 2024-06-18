@@ -58,6 +58,7 @@ def fix_date_time(my_date_time):
 def get_my_team_first_page_link(my_league_link):
     print(my_league_link)
     time.sleep(my_var.time_sleep_between_each_link)
+    my_table = []
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -74,7 +75,6 @@ def get_my_team_first_page_link(my_league_link):
             # print(row)
             # print("--------------------------------")
         counter = 0
-        my_table=[]
         for item in my_list_with_soup_elements:
 
 
@@ -141,9 +141,10 @@ def get_my_team_first_page_link(my_league_link):
         print(type(error))
         print(error.args)
         print(error)
-        time.sleep(my_var.time_sleep_reload_page_after_too_many_requests)
+        # return my_table
+        # time.sleep(my_var.time_sleep_reload_page_after_too_many_requests)
         # if my_var.my_old_url != my_league_link:
-        #     my_var.my_counter=5
+        #     my_var.my_counter=3
         # while my_var.my_counter>0:
         #
         #     time.sleep(5)

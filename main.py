@@ -10,9 +10,12 @@ from io import StringIO
 from time import sleep
 from urllib.request import Request, urlopen
 import Show_data
-
+import os
 import sql_connections
 import get_my_data_from_total_cormer
+import openpyxl
+import xlwings as xw
+import os
 
 
 def duplicate_or_already_exist_in_sql(my_table):
@@ -29,6 +32,8 @@ def duplicate_or_already_exist_in_sql(my_table):
     print("remove duplicates")
 
     my_table = sql_connections.find_if_exist(my_table)
+
+
     # print(my_table)
 
     return my_table
@@ -64,6 +69,15 @@ def create_database(self):
         sql_connections.drop_create_table()
 
 
+
+def remove_empty(my_table):
+    for line in my_table:
+        if line[4]== '0 - 0' and line[6]== '0 - 0' and line[7]== '0-0':
+            my_table.remove(line)
+            remove_empty(my_table)
+    return my_table
+
+
 def live_page(self):
     my_var.times_live_button_pussed += 1
     # print("live page data")
@@ -88,24 +102,49 @@ def live_page(self):
                     my_var.temp_month = '12'
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
             counter += 1
-        if temp_counter_for_test == 5:
-            break
+        # if temp_counter_for_test == 5:
+        #     break
     for page in my_data:
         # print(page)
         if page is not None:
             for row in page:
                 my_table.append(row)
+
+    # find if exist already in sql and delete
     my_table = duplicate_or_already_exist_in_sql(my_table)
 
-    # print(my_data)
-    # print('----------------------------')
-    # for dato in my_data:
-    #     print(dato)
+    # find if the game haven't started yet.
+    my_table = remove_empty(my_table)
+
+
     sql_connections.insert_data_of_the_games(my_table)
 
 
 def show_detailed_data():
     Show_data.show_detailed_data()
+
+def create_excell_all_data():
+    my_team = sql_connections.get_all_teams_data()
+    file_path = os.path.join(os.path.expanduser("~"), "Desktop", "totalcorner_all_data.xlsx")
+
+    wb = xw.Book()
+    wb.api.VBProject.VBComponents.Add(1).CodeModule.AddFromString(my_var.vba_code)
+
+
+
+    try:
+        my_table = pd.DataFrame(my_team)
+
+        # Add an identifier column to distinguish the tables
+        my_table['Table'] = 'Table1'
+
+        my_table.columns = ['ID', 'Game_ID', 'League', 'Date', 'Home', 'Goal_Home', 'Goal_Away', 'Away', 'Corner',
+                          'Half_corner', 'Attacks',
+                          'Shots', 'ID_goals', 'Game_ID', 'Minutes', 'Home_Away', 'table']
+
+        my_table.to_excel(file_path, index=False, engine='openpyxl')
+    except Exception as error:
+        print(error.args)
 
 
 class DesignMainWindow:
@@ -125,6 +164,9 @@ class DesignMainWindow:
                                                            command=lambda: create_database(self))
         self.my_button_show_data_details = Button(self.frame_top, text="Show detailed data",
                                                   command=show_detailed_data, padx=30, pady=30)
+        self.my_button_create_excell_all_data = Button(self.frame_top, text="Create excell all data",
+                                                  command=create_excell_all_data, padx=30, pady=30)
+
 
         self.frame_top.pack(side=TOP, expand=False, fill=BOTH)
         self.frame_buttom.pack(side=BOTTOM, expand=True, fill=BOTH)
@@ -133,12 +175,13 @@ class DesignMainWindow:
         self.my_button_live_page_data.pack(pady=5)
         self.my_button_create_database_and_tables.pack(pady=5)
         self.my_button_show_data_details.pack(pady=5)
+        self.my_button_create_excell_all_data.pack(pady=5)
 
         # Bind the Escape key to a function that does nothing
         self.root.bind('<Escape>', self.do_nothing)
 
     def do_nothing(self, event):
-        pass
+        print("escape")
 
 
 class Start:

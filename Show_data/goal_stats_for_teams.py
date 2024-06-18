@@ -45,7 +45,7 @@ def create_excel_detail():
         combined_table = pd.concat([table1, table2], axis=0, ignore_index=True, sort=False)
 
         # Save the combined table to an Excel file
-        file_path = 'C:/Users/AlexPc/Desktop/combined_table.xlsx'
+        file_path = 'C:/Users/AlexPc/Desktop/totalcorner_data.xlsx'
         combined_table.to_excel(file_path, index=False)
     except Exception as error:
         print(error.args)
@@ -59,6 +59,10 @@ def find_goals_per_15minutes(team1, team2):
     # print(team1, "   ", team2)
     my_team1_score_goals_home, my_team1_score_goals_away, my_team2_score_goals_home, my_team2_score_goals_away = initialize_goal_lists()
     my_team1_get_goals_home, my_team1_get_goals_away, my_team2_get_goals_home, my_team2_get_goals_away = initialize_goal_lists()
+
+
+
+
 
     for i in my_team1:
         # print(i)
@@ -201,7 +205,7 @@ def find_goals_per_15minutes(team1, team2):
 
     print('TOTAL')
     print(f'Team {team1} scored Home:    {my_team1_score_goals_home[:6]}  '
-          f'Total goals:{my_team1_score_goals_home[6:7]} / Goals the last 5 min:{my_team1_score_goals_home[7:]}')
+          f'Total goals:{my_team1_score_goals_home[6:7]} :{my_team1_score_goals_home[7:]}')
     print(f'Team {team1} gets goal Away: {my_team1_get_goals_home[:6]}  '
           f'Total goals:{my_team1_get_goals_home[6:7]} / Goals the last 5 min:{my_team1_get_goals_home[7:]}')
     print("------------------------------------")
