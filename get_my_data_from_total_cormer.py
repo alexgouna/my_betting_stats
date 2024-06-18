@@ -78,6 +78,7 @@ def get_my_team_first_page_link(my_league_link):
         for item in my_list_with_soup_elements:
 
 
+
             pos_match_id_start = item.find('data-match_id=') + 15
             pos_match_id_end = item.find('<td class=', pos_match_id_start) - 3
 

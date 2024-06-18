@@ -12,7 +12,6 @@ from urllib.request import Request, urlopen
 times_live_button_pussed = 0
 my_old_url = ""
 my_counter = 5
-my_pages_to_collect_data = 7
 time_sleep_reload_page_after_too_many_requests = 20
 time_sleep_between_each_link = 3
 count_tries_to_connect = 1
@@ -113,6 +112,32 @@ End Sub
 
 
 
+def my_pages_to_collect_data(my_league_link):
+
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(my_league_link, headers=headers)
+        response.raise_for_status()
+
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        soup_str = str(soup)
+        pos_pager_start = soup_str.rfind('/page:')+6
+        pos_pager_end = soup_str.find('"', pos_pager_start)
+
+        print(soup_str[pos_pager_start:pos_pager_end])
+        return int(soup_str[pos_pager_start:pos_pager_end])+1
+
+
+    except Exception as error:
+        print(error.args)
+        return 2
+
+
+
+
 # the league list is getting from the text file "league list.txt" and the format is line 1 title/ line 2 link /line3 title etc.
 def list_league():
     file_path = 'league list.txt'
@@ -128,3 +153,6 @@ def list_league():
 
 current_year = '2024'
 temp_month='12'
+
+
+

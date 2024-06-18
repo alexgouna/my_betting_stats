@@ -23,7 +23,7 @@ def duplicate_or_already_exist_in_sql(my_table):
     while i < len(my_table) - 1:
         j = i + 1
         while j < len(my_table):
-            if my_table[i][0] == my_table[j][0]:
+            if my_table[i][1] == my_table[j][1]:
                 # print(my_table[i][0], "    ", my_table[j][0])
                 my_table.remove(my_table[j])
             else:
@@ -89,21 +89,25 @@ def live_page(self):
     for link in sql_connections.get_my_team_first_page_link(my_link):
         temp_counter_for_test += 1
         # print('2222222',link)
+        total_pages = my_var.my_pages_to_collect_data(link)
         if my_var.times_live_button_pussed < 2:
-            for i in range(1, my_var.my_pages_to_collect_data):
+            for i in range(1, total_pages):
                 my_var.current_year = '2024'
                 my_var.temp_month = '12'
                 my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
         else:
             # αν πατήσω κουμπί των live περισσότερες από μία φορές.
             if counter < 30:
-                for i in range(1, my_var.my_pages_to_collect_data):
+                for i in range(1, total_pages):
                     my_var.current_year = '2024'
                     my_var.temp_month = '12'
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
             counter += 1
+        #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
         # if temp_counter_for_test == 5:
         #     break
+        #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
+        # print(my_data)
     for page in my_data:
         # print(page)
         if page is not None:
