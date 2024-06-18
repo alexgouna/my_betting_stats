@@ -127,7 +127,7 @@ def my_pages_to_collect_data(my_league_link):
         pos_pager_start = soup_str.rfind('/page:')+6
         pos_pager_end = soup_str.find('"', pos_pager_start)
 
-        print(soup_str[pos_pager_start:pos_pager_end])
+        # print(soup_str[pos_pager_start:pos_pager_end])
         return int(soup_str[pos_pager_start:pos_pager_end])+1
 
 
