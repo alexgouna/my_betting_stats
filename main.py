@@ -23,7 +23,7 @@ def duplicate_or_already_exist_in_sql(my_table):
     while i < len(my_table) - 1:
         j = i + 1
         while j < len(my_table):
-            if my_table[i][1] == my_table[j][1]:
+            if my_table[i][0] == my_table[j][0]:
                 # print(my_table[i][0], "    ", my_table[j][0])
                 my_table.remove(my_table[j])
             else:
@@ -104,8 +104,8 @@ def live_page(self):
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
             counter += 1
         #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
-        # if temp_counter_for_test == 5:
-        #     break
+        if temp_counter_for_test == 10:
+            break
         #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
         # print(my_data)
     for page in my_data:
@@ -116,6 +116,7 @@ def live_page(self):
 
     # find if exist already in sql and delete
     my_table = duplicate_or_already_exist_in_sql(my_table)
+
 
     # find if the game haven't started yet.
     my_table = remove_empty(my_table)
