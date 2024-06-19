@@ -32,7 +32,7 @@ class DesignDetailWindow(QMainWindow):
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels([
             "ID", "Game_ID", "League", "Time", "Home", "Goal_Home", "Goal_Away", "Away", "Corner", "Corner_half",
-            "Dangerous_Attacks", "Shots","Time_Line"
+            "Dangerous_Attacks", "Shots"
         ])
 
         # Setup the proxy model for filtering
