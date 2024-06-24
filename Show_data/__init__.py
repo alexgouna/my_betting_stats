@@ -52,4 +52,9 @@ class DesignDetailWindow(QMainWindow):
         Show_data.goal_stats_for_teams.start(my_game[4], my_game[7])
         print(f"Selected ID: {my_game}")
 
-
+def show_detailed_data():
+    app = QApplication(sys.argv)
+    window = DesignDetailWindow()
+    window.show()
+    app.exec_()
+    # sys.exit(app.exec_())

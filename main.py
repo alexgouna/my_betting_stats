@@ -104,7 +104,7 @@ def live_page(self):
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
             counter += 1
         #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
-        if temp_counter_for_test == 10:
+        if temp_counter_for_test == 3:
             break
         #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
         # print(my_data)

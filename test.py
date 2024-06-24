@@ -1,7 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeView, QVBoxLayout, QWidget, QLineEdit, QHeaderView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeView, QVBoxLayout, QWidget, QAbstractItemView
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from PyQt5.QtCore import Qt, QSortFilterProxyModel, QRegularExpression
 import sqlite3
 import Show_data.goal_stats_for_teams
 
@@ -16,17 +15,12 @@ class DesignDetailWindow(QMainWindow):
         # Setup the central widget and layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
-
-        # Create a single filter widget
-        self.filter_edit = QLineEdit()
-        self.filter_edit.setPlaceholderText("Filter all columns")
-        self.filter_edit.textChanged.connect(self.set_filter)
-        main_layout.addWidget(self.filter_edit)
+        layout = QVBoxLayout(central_widget)
 
         # Create the QTreeView
         self.tree = QTreeView()
-        main_layout.addWidget(self.tree)
+        self.tree.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        layout.addWidget(self.tree)
 
         # Setup the model
         self.model = QStandardItemModel()
@@ -34,14 +28,7 @@ class DesignDetailWindow(QMainWindow):
             "ID", "Game_ID", "League", "Time", "Home", "Goal_Home", "Goal_Away", "Away", "Corner", "Corner_half",
             "Dangerous_Attacks", "Shots"
         ])
-
-        # Setup the proxy model for filtering
-        self.proxy_model = QSortFilterProxyModel()
-        self.proxy_model.setSourceModel(self.model)
-        self.proxy_model.setFilterKeyColumn(-1)  # Allow filtering on all columns
-        self.tree.setModel(self.proxy_model)
-        self.tree.setSortingEnabled(True)
-        self.tree.header().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.tree.setModel(self.model)
 
         # Populate the QTreeView
         self.populate_treeview()
@@ -60,20 +47,17 @@ class DesignDetailWindow(QMainWindow):
         conn.close()
 
     def on_double_click(self, index):
-        index = self.proxy_model.mapToSource(index)
         item = self.model.itemFromIndex(index)
         my_game = [self.model.item(item.row(), col).text() for col in range(self.model.columnCount())]
         Show_data.goal_stats_for_teams.start(my_game[4], my_game[7])
         print(f"Selected ID: {my_game}")
 
-    def set_filter(self):
-        filter_text = self.filter_edit.text()
-        regex = QRegularExpression(filter_text, QRegularExpression.CaseInsensitiveOption)
-        self.proxy_model.setFilterRegularExpression(regex)
 
-
-if __name__ == "__main__":
+def show_detailed_data():
     app = QApplication(sys.argv)
     window = DesignDetailWindow()
     window.show()
     sys.exit(app.exec_())
+
+
+
