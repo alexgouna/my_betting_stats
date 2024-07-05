@@ -18,7 +18,6 @@ count_tries_to_connect = 1
 total_corner_live = 'https://www.totalcorner.com/match/today'
 
 vba_code="""
-
 Sub start()
     If Cells(1, 14) = "Game_ID" Then
         Columns.EntireColumn(14).Delete

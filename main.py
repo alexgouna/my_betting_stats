@@ -16,7 +16,7 @@ import get_my_data_from_total_cormer
 import openpyxl
 import xlwings as xw
 import os
-
+import datetime
 
 def duplicate_or_already_exist_in_sql(my_table):
     i = 0
@@ -69,10 +69,17 @@ def create_database(self):
         sql_connections.drop_create_table()
 
 
+def date_today(my_date):
+    if int(datetime.date.today().year) == int(my_date[:4]):
+        if int(datetime.date.today().month) == int(my_date[5:7]):
+            if int(datetime.date.today().day) == int(my_date[8:10]):
+                return True
+    return False
 
 def remove_empty(my_table):
     for line in my_table:
-        if line[4]== '0 - 0' and line[6]== '0 - 0' and line[7]== '0-0':
+        # print(line)
+        if line[4]== '0 - 0' and line[6]== '0 - 0' and line[7]== '0-0' and not date_today(line[2]):
             my_table.remove(line)
             remove_empty(my_table)
     return my_table
@@ -104,7 +111,7 @@ def live_page(self):
                     my_data.append(get_my_data_from_total_cormer.get_my_team_first_page_link(link + str(i)))
             counter += 1
         #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
-        if temp_counter_for_test == 3:
+        if temp_counter_for_test == 5:
             break
         #     ------------------------------TEST------------------TEST------------------TEST------------------TEST------------------TEST----------
         # print(my_data)
